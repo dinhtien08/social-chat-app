@@ -1,0 +1,24 @@
+import { Controller, Get } from '@nestjs/common';
+import { AppService } from './app.service.js';
+import { ConfigService } from '@nestjs/config';
+
+@Controller()
+export class AppController {
+  constructor(
+    private readonly appService: AppService,
+    private readonly configService: ConfigService,
+  ) {}
+
+  @Get()
+  getHello(): string {
+    return this.appService.getHello();
+  }
+  @Get('config')
+  getConfig() {
+    const nodeEnv = this.configService.get<string>('NODE_ENV');
+    const dbURL = this.configService.get<string>('DATABASE_URL');
+    const port = this.configService.get<number>('PORT');
+
+    return { nodeEnv, dbURL, port };
+  }
+}
